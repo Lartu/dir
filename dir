@@ -27,6 +27,17 @@ def get_dir_size(path=os.getcwd()):
     return total_size
 
 
+def countTotal(filelist) -> int:
+    total = 0
+    for file in filelist:
+        if file[0] == ".":
+            if show_hidden:
+                total += 1
+        else:
+            total += 1
+    return total
+
+
 def listElement(file, isdir):
     mlen = MAX_NAME_LENGTH
     raw_filename = file
@@ -98,15 +109,15 @@ except:
 
 print("\n Directory of " + os.getcwd() + "\n")
 
-if dirs:
+if countTotal(dirs) > 0:
     print (" -=- [ Directories ] -=-")
     for dir in dirs:
         listElement(dir, True)
 
-if dirs and files:
+if countTotal(dirs) > 0 and countTotal(files) > 0:
     print("")
 
-if files:
+if countTotal(files) > 0:
     print (" -=- [ Files ] -=-")
     for file in files:
         listElement(file, False)
