@@ -13,6 +13,8 @@ files = []
 dirs = []
 MAX_NAME_LENGTH = 40
 show_hidden = False
+skip_dirs = False
+skip_files = False
 
 # --- Functions ---
 def get_dir_size(path=os.getcwd()):
@@ -92,22 +94,40 @@ if len(argv) > 1:
             show_size = True
         elif arg == "-h":
             show_hidden = True
+        elif arg == "-f":
+            skip_dirs = True
+        elif arg == "-d":
+            skip_files = True
         elif arg == "--help":
             print(f"Showing size by default: {show_size}.")
             print(f"Use -s to show file sizes.")
             print(f"Use -a to show hidden files.")
+            print(f"Use -d to only display directories.")
+            print(f"Use -f to only display files.")
         else:
             path = arg
 try:
-    files = [f for f in listdir(path) if isfile(join(path, f))]
-    dirs = [f for f in listdir(path) if not isfile(join(path, f))]
-    files.sort()
-    dirs.sort()
+    if not skip_files:
+        files = [f for f in listdir(path) if isfile(join(path, f))]
+        files.sort()
+
+    if not skip_dirs:
+        dirs = [f for f in listdir(path) if not isfile(join(path, f))]
+        dirs.sort()
 except:
     print("\nCannot list directory " + path + "\n")
     quit()
 
-print("\n Directory of " + os.getcwd() + "\n")
+print(f"\n Directory of {os.getcwd()}")
+
+if skip_dirs:
+    print(" (-f) Skipping files.")
+
+if skip_files:
+    print(" (-d) Skipping files.")
+
+print("")
+
 
 if countTotal(dirs) > 0:
     print (" -=- [ Directories ] -=-")
